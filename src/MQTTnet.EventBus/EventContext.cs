@@ -1,4 +1,6 @@
-﻿namespace MQTTnet.EventBus
+﻿using MQTTnet.Client;
+
+namespace MQTTnet.EventBus
 {
     public class EventContext
     {

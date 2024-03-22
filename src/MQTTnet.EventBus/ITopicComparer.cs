@@ -11,10 +11,10 @@ namespace MQTTnet.EventBus
     {
         public bool IsMatch(string topic, string filter)
         {
-            if (topic == null) 
+            if (topic == null)
                 throw new ArgumentNullException(nameof(topic));
 
-            return Server.MqttTopicFilterComparer.IsMatch(topic, filter);
+            return MqttTopicFilterComparer.Compare(topic, filter) == MqttTopicFilterCompareResult.IsMatch;
         }
     }
 }

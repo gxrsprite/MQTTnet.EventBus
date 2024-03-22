@@ -1,5 +1,4 @@
 ﻿using MQTTnet.Client;
-using MQTTnet.Client.Options;
 using MQTTnet.Protocol;
 using System;
 using System.Text;
@@ -29,8 +28,9 @@ namespace MQTTnet.EventBus.Listener_ConsoleApp
 
             await mqttClient.SubscribeAsync(topic, MqttQualityOfServiceLevel.AtLeastOnce);
 
-            mqttClient.UseApplicationMessageReceivedHandler(e =>
+            mqttClient.ApplicationMessageReceivedAsync += (async e =>
             {
+                await Task.CompletedTask;
                 Console.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
                 Console.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
                 Console.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");

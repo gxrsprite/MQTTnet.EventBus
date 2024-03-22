@@ -1,4 +1,4 @@
-﻿using MQTTnet.Client.Options;
+﻿using MQTTnet.Client;
 using MQTTnet.EventBus;
 using MQTTnet.EventBus.DependencyInjection.Builder;
 using MQTTnet.EventBus.DependencyInjection.Builder.Impl;

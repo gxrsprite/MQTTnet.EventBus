@@ -3,6 +3,20 @@ using System;
 
 namespace MQTTnet.EventBus.Logger
 {
+    public interface IMqttNetLogger
+    {
+        IMqttNetScopedLogger CreateScopedLogger(string source);
+
+        void Publish(MqttNetLogLevel logLevel, string source, string message, object[] parameters, Exception exception);
+    }
+
+    public interface IMqttNetScopedLogger
+    {
+        IMqttNetScopedLogger CreateScopedLogger(string source);
+
+        void Publish(MqttNetLogLevel logLevel, string message, object[] parameters, Exception exception);
+    }
+
     public interface IEventBusLogger : IMqttNetScopedLogger
     {
         IEventBusLogger CreateLogger(string categoryName);
@@ -54,5 +68,33 @@ namespace MQTTnet.EventBus.Logger
 
         public void Publish(MqttNetLogLevel logLevel, string message, object[] parameters, Exception exception)
             => _logger.Publish(logLevel, _source, message, parameters, exception);
+    }
+
+    public static class MqttNetScopedLoggerExtensions
+    {
+        public static void Verbose(this IMqttNetScopedLogger logger, string message, params object[] parameters)
+        {
+            logger.Publish(MqttNetLogLevel.Verbose, message, parameters, null);
+        }
+
+        public static void Info(this IMqttNetScopedLogger logger, string message, params object[] parameters)
+        {
+            logger.Publish(MqttNetLogLevel.Info, message, parameters, null);
+        }
+
+        public static void Warning(this IMqttNetScopedLogger logger, Exception exception, string message, params object[] parameters)
+        {
+            logger.Publish(MqttNetLogLevel.Warning, message, parameters, exception);
+        }
+
+        public static void Warning(this IMqttNetScopedLogger logger, string message, params object[] parameters)
+        {
+            logger.Publish(MqttNetLogLevel.Warning, message, parameters, null);
+        }
+
+        public static void Error(this IMqttNetScopedLogger logger, Exception exception, string message, params object[] parameters)
+        {
+            logger.Publish(MqttNetLogLevel.Error, message, parameters, exception);
+        }
     }
 }

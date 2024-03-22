@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MQTTnet.Client.Options;
 using MQTTnet.EventBus.Serializers;
 using Serilog;
 using System;
@@ -103,7 +102,7 @@ namespace MQTTnet.EventBus.ConfigurationApp
                         cfg.AddConsumer<StatusChangedConsumer>();
                         //cfg.UseConverter<StatusChangedConverter>();
                         cfg.UseTopicPattern<StatusChangedTopicInfo>(root: "/status", ev => $"/status/{ev.Territory}/{ev.Server}");
-                        cfg.UseMessageBuilder(mb => mb.WithAtLeastOnceQoS());
+                        //cfg.UseMessageBuilder(mb => mb.WithAtLeastOnceQoS()); // update problem
                     });
 
                     eventBuilder.AddEventMapping<StateChanged>(cfg =>

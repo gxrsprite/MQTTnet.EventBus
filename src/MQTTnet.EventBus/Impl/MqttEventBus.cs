@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MQTTnet.Client;
-using MQTTnet.Client.Publishing;
-using MQTTnet.Client.Subscribing;
-using MQTTnet.Client.Unsubscribing;
 using MQTTnet.EventBus.Logger;
 using MQTTnet.EventBus.Reflection;
 using MQTTnet.Exceptions;
@@ -119,7 +116,7 @@ namespace MQTTnet.EventBus.Impl
         {
             if (args != null && args.IsReConnected)
             {
-                if (args.DisconnectReason == Client.Disconnecting.MqttClientDisconnectReason.NormalDisconnection)
+                if (args.DisconnectReason == MqttClientDisconnectReason.NormalDisconnection)
                     await ReSubscribeAllAsync();
             }
         }

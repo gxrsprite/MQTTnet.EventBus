@@ -1,7 +1,4 @@
 ﻿using MQTTnet.Client;
-using MQTTnet.Client.Connecting;
-using MQTTnet.Client.Disconnecting;
-using MQTTnet.Client.Options;
 using MQTTnet.EventBus.Logger;
 using MQTTnet.Exceptions;
 using MQTTnet.Internal;
@@ -19,13 +16,13 @@ namespace MQTTnet.EventBus.Impl
     {
         private bool _disposed;
         private IMqttClient _client;
-        private IMqttClientOptions _options;
+        private MqttClientOptions _options;
         private readonly int _retryCount;
         private readonly IEventBusLogger<DefaultMqttPersisterConnection> _logger;
         private readonly IDictionary<string, MqttClientConnectionEventArgs> _disconnectionCache;
         private readonly AsyncLock _asyncLock;
 
-        public DefaultMqttPersisterConnection(IMqttClientOptions mqttClientOptions, IEventBusLogger<DefaultMqttPersisterConnection> logger, BusOptions busOptions)
+        public DefaultMqttPersisterConnection(MqttClientOptions mqttClientOptions, IEventBusLogger<DefaultMqttPersisterConnection> logger, BusOptions busOptions)
         {
             _asyncLock = new AsyncLock();
             _options = mqttClientOptions;
@@ -42,8 +39,8 @@ namespace MQTTnet.EventBus.Impl
         private IMqttClient CreareMqttClient()
         {
             var client = new MqttFactory().CreateMqttClient();
-            client.UseDisconnectedHandler(OnDisconnectedAsync);
-            client.UseConnectedHandler(OnConnectedAsync);
+            client.DisconnectedAsync += (OnDisconnectedAsync);
+            client.ConnectedAsync += (OnConnectedAsync);
             _logger.LogInformation($"Mqtt Client acquired a persistent connection to '{_options.ClientId}'");
             return client;
         }
@@ -53,7 +50,7 @@ namespace MQTTnet.EventBus.Impl
             if (IsConnected)
                 return true;
 
-            using (await _asyncLock.WaitAsync(cancellationToken))
+            using (await _asyncLock.EnterAsync(cancellationToken))
             {
                 _logger.LogInformation("Mqtt Client is trying to connect");
 

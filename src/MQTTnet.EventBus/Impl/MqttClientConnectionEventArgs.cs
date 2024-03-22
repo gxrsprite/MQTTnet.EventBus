@@ -1,4 +1,4 @@
-﻿using MQTTnet.Client.Disconnecting;
+﻿using MQTTnet.Client;
 using System;
 
 namespace MQTTnet.EventBus.Impl

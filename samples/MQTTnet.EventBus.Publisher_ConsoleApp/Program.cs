@@ -1,6 +1,5 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Client.Options;
 using System;
 using System.Threading.Tasks;
 
@@ -21,7 +20,7 @@ namespace MQTTnet.EventBus.Publisher_ConsoleApp
                 .WithTcpServer("{Ip Address}", 1883)
                 .Build();
 
-            mqttClient.UseDisconnectedHandler(async e =>
+            mqttClient.DisconnectedAsync += (async e =>
             {
                 await mqttClient.ConnectAsync(options);
             });
@@ -37,7 +36,7 @@ namespace MQTTnet.EventBus.Publisher_ConsoleApp
                 var message = new MqttApplicationMessageBuilder()
                     .WithTopic("MyTopic1")
                     .WithPayload(messageText)
-                    .WithExactlyOnceQoS()
+                    //.WithExactlyOnceQoS()
                     .WithRetainFlag()
                     .Build();
 

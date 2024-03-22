@@ -1,6 +1,4 @@
 ﻿using MQTTnet.Client;
-using MQTTnet.Client.Subscribing;
-using MQTTnet.Client.Unsubscribing;
 using MQTTnet.EventBus.Impl;
 using System;
 using System.Threading;
@@ -22,7 +20,7 @@ namespace MQTTnet.EventBus
         {
             if (await persisterConnection.TryConnectAsync(afterDisconnection: false, cancellationToken))
             {
-                persisterConnection.GetClient().UseApplicationMessageReceivedHandler(handler);
+                persisterConnection.GetClient().ApplicationMessageReceivedAsync += (handler);
                 return true;
             }
             return false;

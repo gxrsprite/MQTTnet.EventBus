@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using MQTTnet.Client;
+using System.Threading.Tasks;
 
 namespace MQTTnet.EventBus.AspNetCoreApi_Integration
 {

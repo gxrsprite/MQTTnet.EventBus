@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static ILoggerOptionsBuilder UseInnerLogger(this ILoggerOptionsBuilder builder)
         {
             builder.Services
-                .AddSingleton<IMqttNetLogger, MqttNetLogger>()
+                //.AddSingleton<MQTTnet.EventBus.Logger.IMqttNetLogger, MqttNetLogger>()
                 .AddEventBusLogger<EventBusLogger>();
             return builder;
         }

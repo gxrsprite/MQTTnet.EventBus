@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MQTTnet.Client;
+using System;
 using System.Threading.Tasks;
 
 namespace MQTTnet.EventBus.Reflection
