@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services
                 //.AddSingleton<MQTTnet.EventBus.Logger.IMqttNetLogger, MqttNetLogger>()
-                .AddEventBusLogger<EventBusLogger>();
+                .AddEventBusLogger<MicrosoftEventBusLogger>();
             return builder;
         }
     }

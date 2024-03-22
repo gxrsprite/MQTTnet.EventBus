@@ -1,5 +1,7 @@
-﻿using MQTTnet.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using MQTTnet.Diagnostics;
 using System;
+using System.Collections.Generic;
 
 namespace MQTTnet.EventBus.Logger
 {
@@ -29,45 +31,62 @@ namespace MQTTnet.EventBus.Logger
         void LogError(Exception ex, string message);
     }
 
-    public class EventBusLogger : IEventBusLogger
+    public class MicrosoftEventBusLogger : IEventBusLogger
     {
-        private readonly string _source;
-        private readonly IMqttNetLogger _logger;
-        private readonly IMqttNetScopedLogger _scopedLogger;
+        protected readonly ILogger _logger;
+        private readonly ILoggerFactory _loggerFactory;
+        private static readonly IDictionary<MqttNetLogLevel, LogLevel> _logLevelMap;
 
-        public EventBusLogger(IMqttNetLogger logger, string categoryName)
+        static MicrosoftEventBusLogger()
         {
-            _source = categoryName;
+            _logLevelMap = new Dictionary<MqttNetLogLevel, LogLevel>
+            {
+                { MqttNetLogLevel.Verbose, LogLevel.Trace },
+                { MqttNetLogLevel.Info, LogLevel.Information },
+                { MqttNetLogLevel.Warning, LogLevel.Warning },
+                { MqttNetLogLevel.Error, LogLevel.Error }
+            };
+        }
+
+        public MicrosoftEventBusLogger(ILoggerFactory loggerFactory, ILogger logger)
+        {
+            _loggerFactory = loggerFactory;
             _logger = logger;
-            _scopedLogger = CreateScopedLogger(_source);
         }
 
         public IEventBusLogger CreateLogger(string categoryName)
-            => new EventBusLogger(_logger, categoryName);
-
-        public IEventBusLogger<TCategoryName> CreateLogger<TCategoryName>()
-            => new EventBusLogger<TCategoryName>(_logger);
+            => new MicrosoftEventBusLogger(_loggerFactory, _loggerFactory.CreateLogger(categoryName));
 
         public IMqttNetScopedLogger CreateScopedLogger(string source)
-            => _logger.CreateScopedLogger(source);
+            => new MicrosoftEventBusLogger(_loggerFactory, _loggerFactory.CreateLogger(source));
 
-        public void LogError(Exception ex, string message)
-            => _scopedLogger.Error(ex, message);
-
-        public void LogInformation(string message)
-            => _scopedLogger.Info(message);
+        public IEventBusLogger<TCategoryName> CreateLogger<TCategoryName>()
+            => new MicrosoftEventBusLogger<TCategoryName>(_loggerFactory, _loggerFactory.CreateLogger<TCategoryName>());
 
         public void LogTrace(string message)
-            => _scopedLogger.Verbose(message);
+            => _logger.LogTrace(message);
+
+        public void LogInformation(string message)
+            => _logger.LogInformation(message);
 
         public void LogWarning(string message)
-            => _scopedLogger.Warning(message);
+            => _logger.LogWarning(message);
 
         public void LogWarning(Exception ex, string message)
-            => _scopedLogger.Warning(ex, message);
+            => _logger.LogWarning(ex, message);
+
+        public void LogError(Exception ex, string message)
+            => _logger.LogError(ex, message);
 
         public void Publish(MqttNetLogLevel logLevel, string message, object[] parameters, Exception exception)
-            => _logger.Publish(logLevel, _source, message, parameters, exception);
+            => _logger.Log(_logLevelMap[logLevel], exception, message, parameters);
+    }
+
+    public class MicrosoftEventBusLogger<TCategoryName> : MicrosoftEventBusLogger, IEventBusLogger<TCategoryName>
+    {
+        public MicrosoftEventBusLogger(ILoggerFactory loggerFactory, ILogger<TCategoryName> logger)
+            : base(loggerFactory, logger)
+        { }
     }
 
     public static class MqttNetScopedLoggerExtensions

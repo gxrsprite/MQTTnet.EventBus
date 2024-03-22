@@ -1,27 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Authors>Artyom Tonoyan</Authors>
-    <Company>Revalcon LLC</Company>
-    <Copyright>@ 2019 Revalcon LLC</Copyright>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Revalcon/MQTTnet.EventBus</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Revalcon/MQTTnet.EventBus</RepositoryUrl>
-    <PackageTags>Mqtt MqttNet EventBus Event MQ</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>2.0.0</Version>
-    <OutputType>Library</OutputType>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Description>Event-Based framework for distributed applications (MQTT Core transport support).</Description>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Authors>Artyom Tonoyan</Authors>
+		<Company>Revalcon LLC</Company>
+		<Copyright>@ 2019 Revalcon LLC</Copyright>
+		<PackageLicenseUrl></PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/Revalcon/MQTTnet.EventBus</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Revalcon/MQTTnet.EventBus</RepositoryUrl>
+		<PackageTags>Mqtt MqttNet EventBus Event MQ</PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Version>2.0.0</Version>
+		<OutputType>Library</OutputType>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<Description>Event-Based framework for distributed applications (MQTT Core transport support).</Description>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="MQTTnet" Version="4.3.3.952" />
-    <PackageReference Include="Polly" Version="8.3.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+		<PackageReference Include="MQTTnet" Version="4.3.3.952" />
+		<PackageReference Include="Polly" Version="8.3.1" />
+	</ItemGroup>
 
 </Project>
